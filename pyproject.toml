@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "scalling-service"
+version = "0.1.0"
+description = ""
+authors = ["reydn <a.latypov@ylab.io>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "^4.1.5"
+psycopg2-binary = "^2.9.5"
+django-environ = "^0.9.0"
+django-ninja = "^0.20.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.12.0"
+pytest-django = "^4.5.2"
+isort = "^5.11.4"
+flake8 = "^6.0.0"
+mypy = "^0.991"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+target-version = ['py310']
+include = '\.pyi?$'
+force-exclude='/migrations/'
+
+[tool.isort]
+profile = "black"
+line_length = 120
+sections = ["STDLIB", "THIRDPARTY", "FIRSTPARTY"]
+src_paths = ["backend"]
+skip_glob=["*/migrations/*", ".venv"]
