@@ -41,9 +41,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.postgres",
     # third party apps
+    "django_extensions",
+    "psqlextra",
     # custom apps
     "accounts",
+    "posts",
+    "users",
 ]
 
 MIDDLEWARE = [
@@ -82,7 +87,7 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "ENGINE": "psqlextra.backend",
         "NAME": env("POSTGRES_DB", default="stub"),
         "USER": env("POSTGRES_USER", default="stub"),
         "PASSWORD": env("POSTGRES_PASSWORD", default="stub"),
@@ -90,8 +95,6 @@ DATABASES = {
         "PORT": env("POSTGRES_PORT", default=5432),
     }
 }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -134,3 +137,5 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "accounts.Account"
+
+DEFAULT_CHAR_FIELD_MAX_LENGTH = 150

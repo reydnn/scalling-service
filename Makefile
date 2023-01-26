@@ -40,7 +40,7 @@ migrate: ## migrate dev
 	${DCF_LOCAL} exec app python manage.py migrate --noinput
 
 makemigrations: ## makemigrations dev
-	${DCF_LOCAL} exec app python manage.py makemigrations --noinput
+	${DCF_LOCAL} exec app python manage.py pgmakemigrations
 
 collectstatic: ## collectstatic dev
 	${DCF_LOCAL} exec app python manage.py collectstatic --noinput
