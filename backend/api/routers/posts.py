@@ -8,20 +8,22 @@ from api.api_router import ApiRouter
 from api.responses import ApiResponse, ListPaginatedResponse, PaginationOut
 from core.exceptions import CommentNotFoundError, PostNotFoundError
 from core.structures import DEFAULT_LIMIT, DEFAULT_PAGE, PaginationParams
+from posts.schemas.comments import CommentOut
+from posts.services.comments import CommentService
 
 router = ApiRouter()
 
 
 @router.get(
     "{post_id}/comments",
-    response=ListPaginatedResponse[ApiResponse[CommentOut]],
+    response=ApiResponse[ListPaginatedResponse[CommentOut]],
 )
 def get_comments(
     request: HttpRequest,
     post_id: str = Path(...),
     page: int = Query(default=DEFAULT_PAGE, ge=1),
     limit: int = Query(default=DEFAULT_LIMIT, ge=1),
-):
+) -> ApiResponse[ListPaginatedResponse[CommentOut]]:
     pagination_params = PaginationParams(
         page=page,
         limit=limit,
@@ -50,7 +52,7 @@ def get_comment_by_id(
     request: HttpRequest,
     post_id: str = Path(...),
     comment_id: str = Path(..., alias="id"),
-):
+) -> ApiResponse[CommentOut]:
     try:
         comment = CommentService(post_id=post_id).get_one(comment_id=comment_id)
     except (PostNotFoundError, CommentNotFoundError) as e:
@@ -70,7 +72,7 @@ def update_comment_by_id(
     request: HttpRequest,
     post_id: str = Path(...),
     comment_id: str = Path(..., alias="id"),
-):
+) -> ApiResponse[CommentOut]:
     try:
         comment = CommentService(post_id=post_id).update_one(comment_id=comment_id)
     except (PostNotFoundError, CommentNotFoundError) as e:
@@ -90,7 +92,7 @@ def delete_comment_by_id(
     request: HttpRequest,
     post_id: str = Path(...),
     comment_id: str = Path(..., alias="id"),
-):
+) -> ApiResponse[CommentOut]:
     try:
         CommentService(post_id=post_id).delete_one(comment_id=comment_id)
     except (PostNotFoundError, CommentNotFoundError) as e:
@@ -109,7 +111,7 @@ def delete_comment_by_id(
 def create_comment(
     request: HttpRequest,
     post_id: str = Path(...),
-):
+) -> ApiResponse[CommentOut]:
     try:
         comment = CommentService(post_id=post_id).create_one()
     except PostNotFoundError as e:

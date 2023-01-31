@@ -9,5 +9,5 @@ class PaginationParams(Schema):
     limit: int = Field(DEFAULT_LIMIT, ge=1)
 
     @property
-    def offset(self):
+    def offset(self) -> int:
         return (self.page - 1) * self.limit
