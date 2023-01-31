@@ -3,6 +3,7 @@ from datetime import datetime
 from django.conf import settings
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
+from psqlextra.manager import PostgresManager
 from psqlextra.models import PostgresPartitionedModel
 from psqlextra.types import PostgresPartitioningMethod
 
@@ -32,6 +33,8 @@ class Post(TimeStampedModel):
         default=0,
     )
 
+    objects = PostgresManager()
+
     class Meta:
         verbose_name = "Пост"
         verbose_name_plural = "Посты"
@@ -40,11 +43,18 @@ class Post(TimeStampedModel):
 class PostTag(models.Model):
     """Тег поста."""
 
-    post = models.ForeignKey(to=Post, on_delete=models.CASCADE, verbose_name="Пост", related_name="post_tags")
+    post = models.ForeignKey(
+        to=Post,
+        on_delete=models.CASCADE,
+        verbose_name="Пост",
+        related_name="post_tags",
+    )
     tag = models.CharField(
         verbose_name="Тег",
         max_length=settings.DEFAULT_CHAR_FIELD_MAX_LENGTH,
     )
+
+    objects = PostgresManager()
 
     class Meta:
         verbose_name = "Тег поста"
@@ -77,6 +87,8 @@ class Comment(PostgresPartitionedModel):
         verbose_name="Дата создания",
         default=datetime.utcnow,
     )
+
+    objects = PostgresManager()
 
     class Meta:
         verbose_name = "Комментарий"

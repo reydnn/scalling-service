@@ -3,6 +3,7 @@ from datetime import datetime
 from django.conf import settings
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
+from psqlextra.manager import PostgresManager
 
 from users.utils import validate_phone_number
 
@@ -49,6 +50,8 @@ class User(TimeStampedModel):
         validators=[validate_phone_number],
     )
 
+    objects = PostgresManager()
+
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
@@ -68,6 +71,8 @@ class Interests(models.Model):
         max_length=settings.DEFAULT_CHAR_FIELD_MAX_LENGTH,
     )
 
+    objects = PostgresManager()
+
     class Meta:
         verbose_name = "Увлечение пользователя"
         verbose_name_plural = "Увлечения пользователя"
@@ -86,6 +91,8 @@ class UserTag(models.Model):
         verbose_name="Тег",
         max_length=settings.DEFAULT_CHAR_FIELD_MAX_LENGTH,
     )
+
+    objects = PostgresManager()
 
     class Meta:
         verbose_name = "Тег пользователя"
@@ -113,6 +120,8 @@ class Photo(models.Model):
         verbose_name="Флаг основного фото",
         default=False,
     )
+
+    objects = PostgresManager()
 
     class Meta:
         verbose_name = "Фото пользователя"
@@ -144,6 +153,8 @@ class Friendship(models.Model):
         verbose_name="Дата принятия запроса",
         null=True,
     )
+
+    objects = PostgresManager()
 
     class Meta:
         verbose_name = "Друг пользователя"

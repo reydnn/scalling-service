@@ -4,3 +4,7 @@ class PostNotFoundError(Exception):
 
 class CommentNotFoundError(Exception):
     """Ошибка поиска комментария."""
+
+
+class UserNotFoundError(Exception):
+    """Ошибка поиска пользователя."""

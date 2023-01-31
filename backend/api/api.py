@@ -2,6 +2,8 @@ from django.http import HttpRequest, HttpResponse
 from ninja import NinjaAPI
 from ninja.errors import ValidationError
 
+from api.routers import posts
+
 api = NinjaAPI()
 
 
@@ -16,3 +18,6 @@ def validation_errors(request: HttpRequest, exc: ValidationError) -> HttpRespons
         errors[err["loc"][-1]] = msg
 
     return api.create_response(request, {"field_errors": errors}, status=422)
+
+
+api.add_router("/posts", posts.router, tags=["posts"])

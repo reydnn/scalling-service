@@ -6,7 +6,7 @@ from ninja.errors import HttpError
 
 from api.api_router import ApiRouter
 from api.responses import ApiResponse, ListPaginatedResponse, PaginationOut
-from core.exceptions import CommentNotFoundError, PostNotFoundError
+from core.exceptions import CommentNotFoundError, PostNotFoundError, UserNotFoundError
 from core.structures import DEFAULT_LIMIT, DEFAULT_PAGE, PaginationParams
 from posts.schemas.comments import CommentIn, CommentOut, CommentUpdateIn
 from posts.services.comments import CommentService
@@ -25,7 +25,7 @@ def create_comment(
 ) -> ApiResponse[CommentOut]:
     try:
         comment = CommentService(post_id=post_id).create_one(new_comment=new_comment)
-    except PostNotFoundError as e:
+    except (PostNotFoundError, UserNotFoundError) as e:
         raise HttpError(
             status_code=HTTPStatus.NOT_FOUND,
             message=str(e),
@@ -59,7 +59,11 @@ def get_comments(
     return ApiResponse(
         data=ListPaginatedResponse(
             items=comments,
-            pagination=PaginationOut(**pagination_params.dict(), total=count),
+            pagination=PaginationOut(
+                offset=pagination_params.offset,
+                limit=pagination_params.limit,
+                total=count,
+            ),
         ),
     )
 
@@ -107,7 +111,7 @@ def update_comment_by_id(
 
 @router.delete(
     "{post_id}/comments/{id}",
-    response=HTTPStatus.NO_CONTENT,
+    # response=HTTPStatus.NO_CONTENT,
 )
 def delete_comment_by_id(
     request: HttpRequest,
