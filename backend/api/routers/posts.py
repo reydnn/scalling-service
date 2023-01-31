@@ -8,10 +8,30 @@ from api.api_router import ApiRouter
 from api.responses import ApiResponse, ListPaginatedResponse, PaginationOut
 from core.exceptions import CommentNotFoundError, PostNotFoundError
 from core.structures import DEFAULT_LIMIT, DEFAULT_PAGE, PaginationParams
-from posts.schemas.comments import CommentOut
+from posts.schemas.comments import CommentIn, CommentOut, CommentUpdateIn
 from posts.services.comments import CommentService
 
 router = ApiRouter()
+
+
+@router.post(
+    "{post_id}/comments",
+    response=ApiResponse[CommentOut],
+)
+def create_comment(
+    request: HttpRequest,
+    new_comment: CommentIn,
+    post_id: str = Path(...),
+) -> ApiResponse[CommentOut]:
+    try:
+        comment = CommentService(post_id=post_id).create_one(new_comment=new_comment)
+    except PostNotFoundError as e:
+        raise HttpError(
+            status_code=HTTPStatus.NOT_FOUND,
+            message=str(e),
+        )
+
+    return ApiResponse(data=comment)
 
 
 @router.get(
@@ -29,7 +49,7 @@ def get_comments(
         limit=limit,
     )
     try:
-        comments, count = CommentService(post_id=post_id).get_all(pagination_params=pagination_params)
+        comments, count = CommentService(post_id=post_id).get_all(pagination=pagination_params)
     except PostNotFoundError as e:
         raise HttpError(
             status_code=HTTPStatus.NOT_FOUND,
@@ -70,11 +90,12 @@ def get_comment_by_id(
 )
 def update_comment_by_id(
     request: HttpRequest,
+    update_data: CommentUpdateIn,
     post_id: str = Path(...),
     comment_id: str = Path(..., alias="id"),
 ) -> ApiResponse[CommentOut]:
     try:
-        comment = CommentService(post_id=post_id).update_one(comment_id=comment_id)
+        comment = CommentService(post_id=post_id).update_one(comment_id=comment_id, update_data=update_data)
     except (PostNotFoundError, CommentNotFoundError) as e:
         raise HttpError(
             status_code=HTTPStatus.NOT_FOUND,
@@ -92,7 +113,7 @@ def delete_comment_by_id(
     request: HttpRequest,
     post_id: str = Path(...),
     comment_id: str = Path(..., alias="id"),
-) -> ApiResponse[CommentOut]:
+) -> HTTPStatus:
     try:
         CommentService(post_id=post_id).delete_one(comment_id=comment_id)
     except (PostNotFoundError, CommentNotFoundError) as e:
@@ -102,22 +123,3 @@ def delete_comment_by_id(
         )
 
     return HTTPStatus.NO_CONTENT
-
-
-@router.post(
-    "{post_id}/comments",
-    response=ApiResponse[CommentOut],
-)
-def create_comment(
-    request: HttpRequest,
-    post_id: str = Path(...),
-) -> ApiResponse[CommentOut]:
-    try:
-        comment = CommentService(post_id=post_id).create_one()
-    except PostNotFoundError as e:
-        raise HttpError(
-            status_code=HTTPStatus.NOT_FOUND,
-            message=str(e),
-        )
-
-    return ApiResponse(data=comment)
