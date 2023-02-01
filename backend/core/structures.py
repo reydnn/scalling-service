@@ -11,3 +11,11 @@ class PaginationParams(Schema):
     @property
     def offset(self) -> int:
         return (self.page - 1) * self.limit
+
+    @property
+    def start(self) -> int:
+        return self.offset
+
+    @property
+    def end(self) -> int:
+        return self.offset + self.limit

@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from ninja import Path, Query
 from ninja.errors import HttpError
 
@@ -111,13 +111,13 @@ def update_comment_by_id(
 
 @router.delete(
     "{post_id}/comments/{id}",
-    # response=HTTPStatus.NO_CONTENT,
+    response={HTTPStatus.NO_CONTENT: None},
 )
 def delete_comment_by_id(
     request: HttpRequest,
     post_id: str = Path(...),
     comment_id: str = Path(..., alias="id"),
-) -> HTTPStatus:
+) -> HttpResponse:
     try:
         CommentService(post_id=post_id).delete_one(comment_id=comment_id)
     except (PostNotFoundError, CommentNotFoundError) as e:
@@ -126,4 +126,4 @@ def delete_comment_by_id(
             message=str(e),
         )
 
-    return HTTPStatus.NO_CONTENT
+    return HttpResponse(status=HTTPStatus.NO_CONTENT)

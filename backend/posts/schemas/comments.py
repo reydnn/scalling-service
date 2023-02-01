@@ -7,7 +7,6 @@ from users.schemas.users import UserShort
 
 class CommentIn(Schema):
     content: str
-    post_id: str
     author_id: str
 
 
