@@ -18,6 +18,6 @@ class TestPostService:
 
     def test_get_one_not_found(self):
         with pytest.raises(PostNotFoundError) as e:
-            id = 123
-            PostService().get_one(post_id=id)
-            assert str(e) == NOT_FOUND_POST_ERROR.format(id=id)
+            _id = 123
+            PostService().get_one(post_id=_id)
+            assert str(e) == NOT_FOUND_POST_ERROR.format(id=_id)

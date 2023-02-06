@@ -140,24 +140,42 @@ AUTH_USER_MODEL = "accounts.Account"
 
 DEFAULT_CHAR_FIELD_MAX_LENGTH = 150
 
+# Логирование
+# LOGGING = {
+#     "version": 1,
+#     "filters": {
+#         "require_debug_true": {
+#             "()": "django.utils.log.RequireDebugTrue",
+#         }
+#     },
+#     "handlers": {
+#         "console": {
+#             "level": "DEBUG",
+#             "filters": ["require_debug_true"],
+#             "class": "logging.StreamHandler",
+#         }
+#     },
+#     "loggers": {
+#         "django.db.backends": {
+#             "level": "DEBUG",
+#             "handlers": ["console"],
+#         }
+#     },
+# }
+
 LOGGING = {
     "version": 1,
-    "filters": {
-        "require_debug_true": {
-            "()": "django.utils.log.RequireDebugTrue",
-        }
-    },
+    "disable_existing_loggers": False,
     "handlers": {
-        "console": {
-            "level": "DEBUG",
-            "filters": ["require_debug_true"],
+        "console_handler": {
             "class": "logging.StreamHandler",
-        }
+        },
     },
     "loggers": {
-        "django.db.backends": {
-            "level": "DEBUG",
-            "handlers": ["console"],
-        }
+        # More info on '' (unnamed) loggers at the end of this comment
+        "": {
+            "level": "INFO",
+            "handlers": ["console_handler"],
+        },
     },
 }

@@ -7,7 +7,7 @@ from users.schemas.users import UserShort
 
 class CommentIn(Schema):
     content: str
-    author_id: str
+    author_id: int
 
 
 class CommentOut(Schema):
