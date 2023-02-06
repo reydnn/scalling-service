@@ -4,7 +4,8 @@ from users.models import User
 
 
 class UserService:
-    def get_one(self, user_id: str) -> User:
+    def get_one(self, user_id: int) -> User:
+        # TODO: Вынести в crud и отсюда отдавать данные с mapper'а
         try:
             user = User.objects.get(pk=user_id)
         except User.DoesNotExist:

@@ -4,7 +4,8 @@ from posts.models import Post
 
 
 class PostService:
-    def get_one(self, post_id: str) -> Post:
+    def get_one(self, post_id: int) -> Post:
+        # TODO: Вынести в Crud и здесь отдавать данные с mapper'а
         try:
             post = Post.objects.get(pk=post_id)
         except Post.DoesNotExist:

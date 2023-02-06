@@ -2,6 +2,6 @@ from ninja import Schema
 
 
 class UserShort(Schema):
-    id: str
+    id: int
     first_name: str
     last_name: str

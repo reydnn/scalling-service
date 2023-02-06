@@ -8,7 +8,7 @@ from users.services.users import UserService
 
 
 class CommentCRUD:
-    def __init__(self, post_id: str) -> None:
+    def __init__(self, post_id: int) -> None:
         self._post_id = post_id
 
     def create_one(self, new_comment: CommentIn) -> Comment:
@@ -32,7 +32,7 @@ class CommentCRUD:
         paginated_comments = comments[pagination.start : pagination.end]
         return paginated_comments, len(comments)
 
-    def get_one(self, comment_id: str) -> Comment:
+    def get_one(self, comment_id: int) -> Comment:
         """Получение комментария по id."""
         comment = (
             Comment.objects.select_related("author")
@@ -46,13 +46,13 @@ class CommentCRUD:
             raise CommentNotFoundError(NOT_FOUND_COMMENT_ERROR.format(id=comment_id, post_id=self._post_id))
         return comment
 
-    def update_one(self, comment_id: str, update_data: CommentUpdateIn) -> Comment:
+    def update_one(self, comment_id: int, update_data: CommentUpdateIn) -> Comment:
         """Обновление комментария по id."""
         comment = self.get_one(comment_id=comment_id)
         Comment.objects.filter(pk=comment.pk).update(**update_data.dict())
         return comment
 
-    def delete_one(self, comment_id: str) -> None:
+    def delete_one(self, comment_id: int) -> None:
         """Удаление комментария по id."""
         comment = self.get_one(comment_id=comment_id)
         comment.delete()

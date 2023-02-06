@@ -5,7 +5,7 @@ from users.schemas.users import UserShort
 
 class CommentToCommentOutMapper:
     @staticmethod
-    def map(comment: Comment, post_id: str) -> CommentOut:
+    def map(comment: Comment, post_id: int) -> CommentOut:
         return CommentOut(
             id=comment.pk,
             content=comment.content,

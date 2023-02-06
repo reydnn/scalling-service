@@ -25,7 +25,7 @@ COPY ./pyproject.toml /pyproject.toml
 COPY ./poetry.lock /poetry.lock
 
 RUN poetry config virtualenvs.create false
-RUN poetry install --no-dev
+RUN poetry install
 
 RUN mkdir -p /backend/static
 RUN chmod 777 -R /backend/static

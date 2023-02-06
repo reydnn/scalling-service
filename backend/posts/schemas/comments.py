@@ -11,9 +11,9 @@ class CommentIn(Schema):
 
 
 class CommentOut(Schema):
-    id: str
+    id: int
     content: str
-    post_id: str
+    post_id: int
     author: UserShort
     created_at: datetime
 
