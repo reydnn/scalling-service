@@ -18,7 +18,7 @@ make up
 make logs
 ```
 
-* Запуск тестов run:
+* Запуск тестов:
 ```shell
 make test
 ```
@@ -37,3 +37,5 @@ make pre-commit-enable
 ```bash
 make pre-commit-disable
 ```
+
+### Структура БД
